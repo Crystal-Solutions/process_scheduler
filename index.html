@@ -1,0 +1,57 @@
+<html ng-app="dataApp">
+  <head>
+    <meta charset="utf-8">
+    <title>OS - Simulator</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"></link>
+    <link href="css/style.css" rel="stylesheet"></link>
+    <script src="js/angular.min.js"></script>
+
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/control.js"></script>
+
+  </head>
+  <body ng-controller="DataCtrl">
+   
+
+
+    <div>
+       <table width="100%"  class="table">
+      <tr class="animate-repeat">
+        <th> #</th>
+        <th> Process Id</th>
+        <th> Start Time</th>
+        <th> Run Time </th>
+        <th> Actions</th>
+
+      </tr>
+      <tr class="animate-repeat"  ng-repeat="process in processes">
+        <td>{{$index+1}}.</td>
+        <td>
+          {{process.id }}
+        </td>
+        <td>
+         {{process.startTime}}
+       </td>
+       <td>
+         {{process.runTime}}
+       </td>
+       <td>
+           <a href="" ng-click="removeProcess(process.id)">remove</a>
+       </td>
+      </tr>
+    </table>
+    <form ng-submit="addProcess()">
+      <input type="text" ng-model="enteredId"><br/>
+      <input type="text" ng-model="enteredStartTime"><br/>
+      <input type="text" ng-model="enteredRunTime"><br/>
+      <input type="submit" value="add">
+    </form>
+      </div>
+
+
+
+      <div>
+
+      </div>
+  </body>
+</html>
