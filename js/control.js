@@ -4,8 +4,9 @@ Validate Inputs
 
 
 
-//App to enter data
+//Process scheduler app
 var dataApp = angular.module('dataApp', ['ngAnimate']);
+
 // Service for data
 dataApp.factory('dataService',function() {
 	//Initial values
@@ -27,8 +28,13 @@ dataApp.controller('DataCtrl', function ($scope,dataService){
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
 
 	$scope.addProcess = function() {
+		//make a process element
 		var p = {id:$scope.enteredId, startTime:$scope.enteredStartTime, runTime:$scope.enteredRunTime};
+
+		//push it into the data set
 		$scope.processes.push(p);
+
+		//clear testboxes
 	  $scope.enteredId = '';
 	  $scope.enteredStartTime = '';
 	  $scope.enteredRunTime = '';
@@ -43,6 +49,7 @@ dataApp.controller('DataCtrl', function ($scope,dataService){
 	        index = i;
 	        break;
 	    } }
+	    
 	    //remove it
 	  	var proc = $scope.processes.splice(index, 1)[0];
 	  	$scope.enteredId = proc.id;
