@@ -10,48 +10,49 @@
     <script src="js/control.js"></script>
 
   </head>
+  
   <body ng-controller="DataCtrl">
-   
 
+    <div id="processes"><!--Shanika: how to put bg color?-->
 
-    <div>
-       <table width="100%"  class="table">
-      <tr class="animate-repeat">
-        <th> #</th>
-        <th> Process Id</th>
-        <th> Start Time</th>
-        <th> Run Time </th>
-        <th> Actions</th>
+      <h3>Process Details List</h3>  <!--Shanika-->
 
-      </tr>
-      <tr class="animate-repeat"  ng-repeat="process in processes">
-        <td>{{$index+1}}.</td>
-        <td>
-          {{process.id }}
-        </td>
-        <td>
-         {{process.startTime}}
-       </td>
-       <td>
-         {{process.runTime}}
-       </td>
-       <td>
-           <a href="" ng-click="removeProcess(process.id)">remove</a>
-       </td>
-      </tr>
-    </table>
-    <form ng-submit="addProcess()">
-      <input type="text" ng-model="enteredId"><br/>
-      <input type="text" ng-model="enteredStartTime"><br/>
-      <input type="text" ng-model="enteredRunTime"><br/>
-      <input type="submit" value="add">
-    </form>
-      </div>
+      <table width="100%"  class="table">
+        <tr class="animate-repeat">
+          <th> #</th>
+          <th> Process Id</th>
+          <th> Start Time</th>
+          <th> Run Time </th>
+          <th> Actions</th>
 
-
-
-      <div>
-
-      </div>
+        </tr>
+        <tr class="animate-repeat"  ng-repeat="process in processes">
+          <td>{{$index+1}}.</td>
+          <td>
+            {{process.id }}
+          </td>
+          <td>
+            {{process.startTime}}
+          </td>
+          <td>
+            {{process.runTime}}
+          </td>
+          <td>
+            <a href="" ng-click="removeProcess(process.id)">remove</a>
+          </td>
+          </tr>
+      </table>
+      <form ng-submit="addProcess()">
+        <input type="text" ng-model="enteredId"><br/>
+        <input type="text" ng-model="enteredStartTime"><br/>
+        <input type="text" ng-model="enteredRunTime"><br/>
+        <input type="submit" value="add">
+      </form>
+    
+    </div>
+      
+    <div id="simulator">
+      <h3>Simulation Control</h3>  <!--Shanika-->
+    </div>
   </body>
 </html>
