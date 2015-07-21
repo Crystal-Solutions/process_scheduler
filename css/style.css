@@ -1,5 +1,5 @@
 .table{
-	font-size:12px;
+  font-size:12px;
 
 }
 
@@ -45,7 +45,7 @@
   }
 
 #processes{   
-  background-color: #E8D501;
+  background-color:rgb(240,240,220);
   color: black;
   height:450px;
   width:600px;
@@ -54,7 +54,7 @@
 }
 
 #simulator{   
-  background-color: #813AFC;
+  background-color:rgb(200,200,220);
   color: black;
   height:450px;
   width:600px;
