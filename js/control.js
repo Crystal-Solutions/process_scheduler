@@ -5,10 +5,10 @@ Validate Inputs
 
 
 //Process scheduler app
-var dataApp = angular.module('dataApp', ['ngAnimate']);
+var schedulerApp = angular.module('schedulerApp', ['ngAnimate']);
 
 // Service for data
-dataApp.factory('dataService',function() {
+schedulerApp.service('dataService',function() {
 	//Initial values
   var data = {
     processes: [
@@ -18,11 +18,17 @@ dataApp.factory('dataService',function() {
     {id:3, startTime:22, runTime:20},
     {id:4, startTime:25, runTime:30},
     ],
+
+    cpuDetails:{step:0, //current step
+    			}, 
+    waitingList:[],
+
+
   };
   return data;
 });
 
-dataApp.controller('DataCtrl', function ($scope,dataService){
+schedulerApp.controller('dataCtrl', function ($scope,dataService){
 
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
@@ -56,6 +62,22 @@ dataApp.controller('DataCtrl', function ($scope,dataService){
 	  	$scope.enteredStartTime = proc.startTime;
 	  	$scope.enteredRunTime = proc.runTime;
 	};
+
+
+});
+
+//Process Simulator
+
+schedulerApp.controller('simulationCtrl', function ($scope,dataService){
+
+	//Processes default
+	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
+
+	$scope.stepForward = function() {
+			$scope.processes.splice(0, 1)[0];
+	}
+
+
 
 
 });
