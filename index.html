@@ -45,6 +45,11 @@
             {{process.priority}}
           </td>
 
+
+          <td>
+            {{process.finished}}
+          </td>
+
           <td>
             <a href="" ng-click="removeProcess(process.id)">remove</a>
           </td>
@@ -64,7 +69,13 @@
 </div>
 
 <div ng-controller="cpuDetails">
-{{cpuDetails.step}}
+CPU Details
+<br>
+time = {{cpuDetails.step}}
+<br>
+occupyTime={{cpuDetails.occupyTime}}
+<br>
+processId={{processes[cpuDetails.processI].id}}
 </div>
 
 

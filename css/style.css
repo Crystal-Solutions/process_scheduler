@@ -19,7 +19,6 @@
     line-height:40px;
     list-style:none;
     box-sizing:border-box;
-    display: block;
   }
 
   .animate-repeat.ng-move,
