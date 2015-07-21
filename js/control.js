@@ -20,8 +20,8 @@ schedulerApp.service('dataService',function() {
     ],
 
     cpuDetails:{step:0, //current step
+    			curretnProcessId:-1,
     			}, 
-    waitingList:[],
 
 
   };
@@ -72,12 +72,31 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
+	$scope.cpuDetails = dataService.cpuDetails;
+	$scope.cpuDetails = dataService.cpuDetails;
 
 	$scope.stepForward = function() {
-			$scope.processes.splice(0, 1)[0];
-	}
+		$scope.cpuDetails.step +=1;
+		calculatePriority();
+	};
+
+	function calculatePriority(){
+		//update waiting time, RR of processes
+		for(var i = 0, len = $scope.processes.length; i < len; i++) {
+			//Negative for processes which are not yet started
+			$scope.processes[i].waitingTime = $scope.cpuDetails.step-$scope.processes[i].startTime;
+
+			//Calculate RR(priority)
+			$scope.processes[i].priority = 1+($scope.processes[i].waitingTime/$scope.processes[i].runTime)
+		}	
+	};
 
 
 
+});
 
+
+//CPU Details ctrl
+schedulerApp.controller('cpuDetails', function ($scope,dataService){
+	$scope.cpuDetails = dataService.cpuDetails;
 });
