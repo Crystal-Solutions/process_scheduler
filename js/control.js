@@ -12,14 +12,17 @@ var schedulerApp = angular.module('schedulerApp', ['ngAnimate']);
 
 // Service for data
 schedulerApp.service('dataService',function() {
-	//Initial values
+//Initial values
   var data = {
     processes: [
-    {id:0, startTime:0, runTime:15, finished:false},
-    {id:1, startTime:10, runTime:10, finished:false},
-    {id:2, startTime:35, runTime:25, finished:false}, 
-    {id:3, startTime:22, runTime:20, finished:false},
-    {id:4, startTime:25, runTime:30, finished:false},
+    {id:0, startTime:0, runTime:15, state:"defined", startedTime:-1, endedTime:-1},
+    {id:1, startTime:10, runTime:10, state:"defined", startedTime:-1, endedTime:-1},
+    {id:2, startTime:35, runTime:25, state:"defined", startedTime:-1, endedTime:-1}, 
+    {id:3, startTime:25, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
+    {id:4, startTime:22, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
+    {id:5, startTime:20, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
+    {id:6, startTime:10, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
+    {id:7, startTime:5, runTime:30, state:"defined", startedTime:-1, endedTime:-1},
     ],
 
     cpuDetails:{step:0, //current step
@@ -39,7 +42,7 @@ schedulerApp.controller('dataCtrl', function ($scope,dataService){
 
 	$scope.addProcess = function() {
 		//make a process element
-		var p = {id:$scope.enteredId, startTime:$scope.enteredStartTime, runTime:$scope.enteredRunTime};
+		var p = {id:$scope.enteredId, startTime:$scope.enteredStartTime, runTime:$scope.enteredRunTime , state:"defined", startedTime:-1, endedTime:-1};
 
 		//push it into the data set
 		$scope.processes.push(p);
@@ -68,6 +71,9 @@ schedulerApp.controller('dataCtrl', function ($scope,dataService){
 	};
 
 
+	$scope.isWaiting = function(item){
+	      return item.waitingTime>=0 && item.state=="defined";
+	    };
 });
 
 //Process Simulator
@@ -116,7 +122,7 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 
 			//mark the time the process ended
 			$scope.processes[processId].endedTime = $scope.cpuDetails.step;
-			$scope.processes[processId].finished = true;
+			$scope.processes[processId].state="finished";
 		}
 		//allocate if cpu is free and if there is a process to be allocated
 		if($scope.cpuDetails.processI==-1)
@@ -125,7 +131,7 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 			var highestPriority = 0;
 			for(var i = 0, len = $scope.processes.length; i < len; i++) {
 				//if waitingTime >=0 and notFinished and highestPriority
-		    	if ($scope.processes[i].waitingTime >= 0 && (!$scope.processes[i].finished) && highestPriority<$scope.processes[i].priority) {
+		    	if ($scope.processes[i].waitingTime >= 0 && ($scope.processes[i].state!="finished") && highestPriority<$scope.processes[i].priority) {
 		    		processI = i;
 		    		highestPriority = $scope.processes[i].priority;
 		    	}
@@ -135,8 +141,8 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 		    if(processI!=-1)
 		    	{
 	    			$scope.cpuDetails.processI = processI
-	    			$scope.processes[processId].startedTime = $scope.cpuDetails.step;
-
+	    			$scope.processes[processI].startedTime = $scope.cpuDetails.step;
+	    			$scope.processes[processI].state = "running";
 		    	}
 		}
 
@@ -151,7 +157,7 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 
 //CPU Details ctrl
 schedulerApp.controller('cpuDetails', function ($scope,dataService){
-	
+
 	$scope.processes = dataService.processes;
 	$scope.cpuDetails = dataService.cpuDetails;
 

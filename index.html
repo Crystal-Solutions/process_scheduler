@@ -37,17 +37,9 @@
           <td>
             {{process.runTime}}
           </td>
-          <td>
-            {{process.waitingTime}}
-          </td>
 
           <td>
-            {{process.priority}}
-          </td>
-
-
-          <td>
-            {{process.finished}}
+            {{process.state}}
           </td>
 
           <td>
@@ -78,6 +70,47 @@ occupyTime={{cpuDetails.occupyTime}}
 processId={{processes[cpuDetails.processI].id}}
 </div>
 
+
+
+<div id="processes" ng-controller="dataCtrl">
+
+      <h3>Waiting List</h3> 
+
+      <table width="100%"  class="table">
+        <tr class="animate-repeat">
+          <th> #</th>
+          <th> Process Id</th>
+          <th> Start Time</th>
+          <th> Run Time </th>
+          <th> Actions</th>
+
+        </tr>
+        <tr class="animate-repeat"  ng-repeat="process in processes | filter:isWaiting">
+          <td>{{$index+1}}.</td>
+          <td>
+            {{process.id }}
+          </td>
+          <td>
+            {{process.startTime}}
+          </td>
+          <td>
+            {{process.runTime}}
+          </td>
+          <td>
+            {{process.waitingTime}}
+          </td>
+
+          <td>
+            {{process.priority}}
+          </td>
+
+
+          <td>
+            {{process.state}}
+          </td>
+          </tr>
+      </table>
+    </div>
 
   </body>
 </html>
