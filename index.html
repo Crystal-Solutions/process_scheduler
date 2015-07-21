@@ -1,4 +1,4 @@
-<html ng-app="dataApp">
+<html ng-app="schedulerApp">
   <head>
     <meta charset="utf-8">
     <title>OS - Simulator</title>
@@ -11,9 +11,9 @@
 
   </head>
   
-  <body ng-controller="DataCtrl">
+  <body >
 
-    <div id="processes"><!--Shanika: how to put bg color?-->
+    <div id="processes" ng-controller="dataCtrl"><!--Shanika: how to put bg color?-->
 
       <h3>Process Details List</h3>  <!--Shanika-->
 
@@ -48,11 +48,13 @@
         <input type="text" ng-model="enteredRunTime"><br/>
         <input type="submit" value="add">
       </form>
-    
     </div>
-      
-    <div id="simulator">
+
+<div id="simulator" ng-controller="simulationCtrl">
       <h3>Simulation Control</h3>  <!--Shanika-->
-    </div>
+      <input type="button" ng-click="stepForward()" value="stepForward">
+</div>
+
+
   </body>
 </html>
