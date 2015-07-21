@@ -4,7 +4,7 @@ HRRN algorithm simulator
 
 
 Inner Architecture
-	-schedulerApp
+	--schedulerApp
 		--dataService
 			processes
 			waitingList
