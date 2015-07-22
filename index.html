@@ -13,7 +13,12 @@
   
   <body >
 
-    <div id="processes" ng-controller="dataCtrl"><!--Shanika: how to put bg color?-->
+    <div id="header">
+      <h1>Scheduling Algorithm Simulator</h1>
+      <h2>Highest Response Ratio Next</h2>
+    </div>
+
+    <div id="processes" ng-controller="dataCtrl"><!--Shanika-->
 
       <h3>Process Details List</h3>  <!--Shanika-->
 
@@ -55,24 +60,9 @@
       </form>
     </div>
 
-<div id="simulator" ng-controller="simulationCtrl">
-      <h3>Simulation Control</h3>  <!--Shanika-->
-      <input type="button" ng-click="stepForward()" value="stepForward">
-</div>
-
-<div ng-controller="cpuDetails">
-CPU Details
-<br>
-time = {{cpuDetails.step}}
-<br>
-occupyTime={{cpuDetails.occupyTime}}
-<br>
-processId={{processes[cpuDetails.processI].id}}
-</div>
 
 
-
-<div id="processes" ng-controller="dataCtrl">
+<div id="waiting" ng-controller="dataCtrl">
 
       <h3>Waiting List</h3> 
 
@@ -110,6 +100,30 @@ processId={{processes[cpuDetails.processI].id}}
           </td>
           </tr>
       </table>
+    </div>
+
+    <div id="cpu" ng-controller="cpuDetails">
+      <h3>CPU Details</h3> 
+      <br>
+      <ul>
+        <li>Time = {{cpuDetails.step}}</li>
+        <li>Occupy Time = {{cpuDetails.occupyTime}}</li>
+        <li>Process Id = {{processes[cpuDetails.processI].id}}</li>
+      </ul>
+    </div>
+
+    <div id="statistics"><!--Shanika-->
+      <h3>Statistics</h3>
+    </div>
+
+    <div id="control" ng-controller="simulationCtrl">
+      <h3>Simulation Control</h3>  <!--Shanika-->
+      <input type="button" ng-click="stepForward()" value="Step Forward">
+    </div>
+
+    <div id="simulator"><!--Shanika-->
+      <h3>Process History</h3>  
+      
     </div>
 
   </body>

@@ -43,23 +43,68 @@
     max-height:40px;
   }
 
+#header {
+    background-color:#0174DF;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+
 #processes{   
-  background-color:rgb(240,240,220);
+  background-color:#F4FA58;
   color: black;
-  height:450px;
+  height:500px;
   width:600px;
   float:left;
   padding: 5px;
 }
 
-#simulator{   
+#control{   
   background-color:rgb(200,200,220);
   color: black;
-  height:450px;
+  height:200px;
+  width:200px;
+  float:left;
+  padding: 5px;
+}
+
+#waiting{   
+  background-color:#AC58FA;
+  color: black;
+  height:250px;
   width:600px;
   float:left;
   padding: 5px;
 }
+
+#cpu{   
+  background-color:#01DF3A;
+  color: black;
+  height:250px;
+  width:300px;
+  float:left;
+  padding: 5px;
+}
+
+#statistics{   
+  background-color:#FA58AC;
+  color: black;
+  height:250px;
+  width:300px;
+  float:left;
+  padding: 5px;
+}
+
+#simulator{   
+  background-color:#FE9A2E;
+  color: black;
+  height:200px;
+  width:1000px;
+  float:left;
+  padding: 5px;
+}
+
+
 
 /*
 #header {
