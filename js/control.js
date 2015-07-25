@@ -76,6 +76,9 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 	$scope.isWaiting = function(item){
 	      return item.waitingTime>=0 && item.state=="defined";
 	    };
+
+
+
 });
 
 //Process Simulator
@@ -184,7 +187,11 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 
 		//Increase CPU occupied time if it is not free
 		if($scope.states.processI!=-1)
+		{
 			$scope.states.occupyTime+=1;
+			var processId = $scope.states.processI;
+			$scope.processes[processId].endedTime = $scope.states.step;
+		}
 	};
 
 
@@ -197,4 +204,17 @@ schedulerApp.controller('states', function ($scope,dataService){
 	$scope.processes = dataService.processes;
 	$scope.states = dataService.states;
 
+});
+
+
+schedulerApp.filter('width', function() {
+   return function(process){
+			return (process.endedTime-process.startedTime)*3;
+	};
+});
+
+schedulerApp.filter('left', function() {
+   return function(process){
+			return process.startedTime*3;
+	};
 });

@@ -140,7 +140,7 @@
     <div id="simulator" ng-controller="dataCtrl"><!--Shanika-->
       <h3>Process History</h3>  
        <div class="animate-repeat"  ng-repeat="process in processes" >
-        <div style="margin-left:{{process.startedTime*3}} ;width:0; width:{{(process.endedTime-process.startedTime)*3}}; background-color:blue;">{{process.id}}</div>
+        <div style="margin-left: {{process| left}} ;width:{{ process |width }}; background-color:blue;">{{process.id}}</div>
        </div>
     </div>
 
