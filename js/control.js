@@ -25,9 +25,11 @@ schedulerApp.service('dataService',function() {
     {id:7, startTime:5, runTime:30, state:"defined", startedTime:-1, endedTime:-1},
     ],
 
-    cpuDetails:{step:0, //current step
+    states:{step:0, //current step
     			processI:-1,
     			occupyTime:0,
+    			simulatorState:"running",
+    			finishedProcessCount:0 //Number of processes finished
     			}, 
 
 
@@ -35,7 +37,7 @@ schedulerApp.service('dataService',function() {
   return data;
 });
 
-schedulerApp.controller('dataCtrl', function ($scope,dataService){
+schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
@@ -77,21 +79,53 @@ schedulerApp.controller('dataCtrl', function ($scope,dataService){
 });
 
 //Process Simulator
-schedulerApp.controller('simulationCtrl', function ($scope,dataService){
+schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', function ($scope,  $interval,dataService){
 
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
-	$scope.cpuDetails = dataService.cpuDetails;
+	$scope.states = dataService.states;
+
+	$scope.speed = 100;
+
+	var runner; 
+
+	//Run the simulaation
+	$scope.play = function()
+	{
+		if(!angular.isDefined(runner))//if not already started
+		{
+			runner = $interval(function() {
+
+				$scope.stepForward();
+			},$scope.speed);
+			$scope.states.simulatorState="running";
+		}
+	}
+
+	//Pause the simulation
+	$scope.pause= function()
+	{
+		if(angular.isDefined(runner) )
+		{
+			 $interval.cancel(runner);
+			 runner = undefined;
+			 $scope.states.simulatorState="paused";
+		}
+	}
 
 	$scope.stepForward = function() {
+
+		//if all processes are finished
+		if($scope.states.finishedProcessCount==$scope.processes.length) { $scope.pause(); return; }
+
 		//First time calculate priorities
-		if($scope.cpuDetails.step==0)
+		if($scope.states.step==0)
 			calculatePriority();
 
 		updateCPU();
 
 		//Calculate priorities for next step alocation
-		$scope.cpuDetails.step +=1;
+		$scope.states.step +=1;
 		calculatePriority();
 	};
 
@@ -99,7 +133,7 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 		//update waiting time, priority of processes
 		for(var i = 0, len = $scope.processes.length; i < len; i++) {
 			//Negative for processes which are not yet started
-			$scope.processes[i].waitingTime = $scope.cpuDetails.step-$scope.processes[i].startTime;
+			$scope.processes[i].waitingTime = $scope.states.step-$scope.processes[i].startTime;
 
 			//Calculate RR(priority)
 			$scope.processes[i].priority = 1+($scope.processes[i].waitingTime/$scope.processes[i].runTime)
@@ -110,22 +144,24 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 	function updateCPU()
 	{
 		//If CPU is not free and occupied time equal to currentProcesses runtime => make cpu free
-		if($scope.cpuDetails.processI!=-1 )
-		if($scope.cpuDetails.occupyTime==$scope.processes[$scope.cpuDetails.processI].runTime)
+		if($scope.states.processI!=-1 )
+		if($scope.states.occupyTime==$scope.processes[$scope.states.processI].runTime)
 		{
 			//free CPU
-			var processId = $scope.cpuDetails.processI;
-			$scope.cpuDetails.processI = -1;
+			var processId = $scope.states.processI;
+			$scope.states.processI = -1;
 
 			//mark occupy time 0
-			$scope.cpuDetails.occupyTime = 0;
+			$scope.states.occupyTime = 0;
 
 			//mark the time the process ended
-			$scope.processes[processId].endedTime = $scope.cpuDetails.step;
+			$scope.processes[processId].endedTime = $scope.states.step;
 			$scope.processes[processId].state="finished";
+			$scope.states.finishedProcessCount++;
 		}
+
 		//allocate if cpu is free and if there is a process to be allocated
-		if($scope.cpuDetails.processI==-1)
+		if($scope.states.processI==-1)
 		{
 			var processI = -1;
 			var highestPriority = 0;
@@ -140,25 +176,25 @@ schedulerApp.controller('simulationCtrl', function ($scope,dataService){
 	    	//if there is a process to be allocated
 		    if(processI!=-1)
 		    	{
-	    			$scope.cpuDetails.processI = processI
-	    			$scope.processes[processI].startedTime = $scope.cpuDetails.step;
+	    			$scope.states.processI = processI
+	    			$scope.processes[processI].startedTime = $scope.states.step;
 	    			$scope.processes[processI].state = "running";
 		    	}
 		}
 
 		//Increase CPU occupied time if it is not free
-		if($scope.cpuDetails.processI!=-1)
-			$scope.cpuDetails.occupyTime+=1;
+		if($scope.states.processI!=-1)
+			$scope.states.occupyTime+=1;
 	};
 
 
-});
+}]);
 
 
 //CPU Details ctrl
-schedulerApp.controller('cpuDetails', function ($scope,dataService){
+schedulerApp.controller('states', function ($scope,dataService){
 
 	$scope.processes = dataService.processes;
-	$scope.cpuDetails = dataService.cpuDetails;
+	$scope.states = dataService.states;
 
 });

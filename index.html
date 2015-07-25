@@ -20,7 +20,8 @@
 
     <div id="processes" ng-controller="dataCtrl"><!--Shanika-->
 
-      <h3>Process Details List</h3>  <!--Shanika-->
+      <h3>Process Details List </h3>  <!--Shanika-->
+
 
       <table width="100%"  class="table">
         <tr class="animate-repeat">
@@ -48,10 +49,22 @@
           </td>
 
           <td>
+            {{process.startedTime}}
+          </td>
+          <td>
+            {{process.endedTime}}
+          </td>
+
+          <td>
             <a href="" ng-click="removeProcess(process.id)">remove</a>
           </td>
           </tr>
+
       </table>
+
+
+
+
       <form ng-submit="addProcess()">
         <input type="text" ng-model="enteredId">
         <input type="text" ng-model="enteredStartTime">
@@ -102,13 +115,13 @@
       </table>
     </div>
 
-    <div id="cpu" ng-controller="cpuDetails">
+    <div id="cpu" ng-controller="states">
       <h3>CPU Details</h3> 
       <br>
       <ul>
-        <li>Time = {{cpuDetails.step}}</li>
-        <li>Occupy Time = {{cpuDetails.occupyTime}}</li>
-        <li>Process Id = {{processes[cpuDetails.processI].id}}</li>
+        <li>Time = {{states.step}}</li>
+        <li>Occupy Time = {{states.occupyTime}}</li>
+        <li>Process Id = {{processes[states.processI].id}}</li>
       </ul>
     </div>
 
@@ -118,7 +131,10 @@
 
     <div id="control" ng-controller="simulationCtrl">
       <h3>Simulation Control</h3>  <!--Shanika-->
+      <input type="text" ng-model="speed">
       <input type="button" ng-click="stepForward()" value="Step Forward">
+      <input type="button" ng-click="play()" value="Start">
+      <input type="button" ng-click="pause()" value="Stop">
     </div>
 
     <div id="simulator"><!--Shanika-->
