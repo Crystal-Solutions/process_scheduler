@@ -9,6 +9,18 @@ input
 }
 
 
+.h1, .h2, .h3, h1, h2, h3,h4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-decoration: underline;
+}
+
+.table>tbody>tr>td
+{
+  
+  line-height: 7px;
+}
+
 /*Animations*/
 
   .list-animate-container {
@@ -53,33 +65,36 @@ input
     background-color:#0174DF;
     color:white;
     text-align:center;
+    width:50%;
+    float: right;
     padding:5px;
 }
 
 #processes{   
   background-color:#F4FA58;
   color: black;
-  height:500px;
-  width:600px;
+  height:470px;
+  width:50%;
   float:left;
   padding: 5px;
   overflow: scroll;
+  overflow-x:hidden;
 }
 
 #control{   
   background-color:rgb(200,200,220);
   color: black;
-  height:200px;
-  width:200px;
-  float:left;
+  height:150px;
+  width:25%;
+  float:right;
   padding: 5px;
 }
 
 #waiting{   
   background-color:#AC58FA;
   color: black;
-  height:250px;
-  width:600px;
+  height:200px;
+  width:50%;
   float:left;
   padding: 5px;
 }
@@ -87,8 +102,8 @@ input
 #cpu{   
   background-color:#01DF3A;
   color: black;
-  height:250px;
-  width:300px;
+  height:150px;
+  width:25%;
   float:left;
   padding: 5px;
 }
@@ -105,8 +120,7 @@ input
 #simulator{   
   background-color:#FE9A2E;
   color: black;
-  height:200px;
-  width:1000px;
+  width:75%;
   float:left;
   padding: 5px;
 }

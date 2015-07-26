@@ -14,11 +14,11 @@
   <body >
 
     <div id="header">
-      <h1>Scheduling Algorithm Simulator</h1>
-      <h2>Highest Response Ratio Next</h2>
+      <h2>Scheduling Algorithm Simulator</h2>
+      <h3>Highest Response Ratio Next</h3>
     </div>
 
-    <div id="processes" ng-controller="dataCtrl"><!--Shanika-->
+    <div id="processes" class="container" ng-controller="dataCtrl"><!--Shanika-->
 
       <h3>Process Details List </h3>  <!--Shanika-->
 
@@ -82,7 +82,7 @@
 
 
       <form ng-submit="addProcess()">
-      <h4>Add new process</h4><br>
+      <h4>Add new process</h4>
       <label> Id: </label>
         <input type="number" ng-model="enteredId" min="0" max="10000"  required>
       <label> Arrive Time: </label>
@@ -94,51 +94,16 @@
     </div>
 
 
+ <div id="control" ng-controller="simulationCtrl">
+      <h3>Simulation Control</h3>  <!--Shanika-->
+      <input type="text" ng-model="speed">
+      <input type="button" ng-click="stepForward()" value="Step Forward">
+      <input type="button" ng-click="play()" value="Start">
+      <input type="button" ng-click="pause()" value="Stop">
+      <input type="button" ng-click="reset()" value="Reset">
+  </div>
 
-<div id="waiting" ng-controller="dataCtrl">
-
-      <h3>Waiting List</h3> 
-
-      <table width="100%"  class="table">
-        <tr class="animate-repeat">
-          <th> # </th>
-          <th> Process Id</th>
-          <th> Arrive Time</th>
-          <th> Expected RunTime </th>
-          <th> Waiting Time </th>
-          <th> Priority(Response Ratio) </th>
-
-          <th> Actions</th>
-
-        </tr>
-        <tr class="animate-repeat"  ng-repeat="process in processes | filter:isWaiting">
-          <td>{{$index+1}}.</td>
-          <td>
-            {{process.id }}
-          </td>
-          <td>
-            {{process.startTime}}
-          </td>
-          <td>
-            {{process.runTime}}
-          </td>
-          <td>
-            {{process.waitingTime}}
-          </td>
-
-          <td>
-            {{process.priority}}
-          </td>
-
-
-          <td>
-            {{process.state}}
-          </td>
-          </tr>
-      </table>
-    </div>
-
-    <div id="cpu" ng-controller="states">
+ <div id="cpu" ng-controller="states">
       <h3>CPU Details</h3> 
       <br>
       <ul>
@@ -148,18 +113,38 @@
       </ul>
     </div>
 
-    <div id="statistics"><!--Shanika-->
-      <h3>Statistics</h3>
+
+<div id="waiting" ng-controller="dataCtrl">
+
+      <h3>Waiting List (ordered by priority) </h3> 
+
+      <table width="100%"  class="table">
+        <tr class="animate-repeat">
+          <th> # </th>
+          <th> Process Id</th>
+          <th> Waiting Time </th>
+          <th> Priority(Response Ratio) </th>
+        </tr>
+        <tr class="animate-repeat"  ng-repeat="process in processes | filter:isWaiting | orderBy:'-priority'">
+         
+          <td>{{$index+1}}.</td>
+          <td>
+            {{process.id }}
+          </td>
+          <td>
+            {{process.waitingTime | format}}
+          </td>
+
+          <td>
+            {{process.priority | number:4 | format}}
+          </td>
+          </tr>
+      </table>
     </div>
 
-    <div id="control" ng-controller="simulationCtrl">
-      <h3>Simulation Control</h3>  <!--Shanika-->
-      <input type="text" ng-model="speed">
-      <input type="button" ng-click="stepForward()" value="Step Forward">
-      <input type="button" ng-click="play()" value="Start">
-      <input type="button" ng-click="pause()" value="Stop">
-      <input type="button" ng-click="reset()" value="Reset">
-    </div>
+   
+
+   
 
     <div id="simulator" ng-controller="dataCtrl"><!--Shanika-->
       <h3>Process History</h3>  
@@ -167,6 +152,11 @@
         <div style="margin-left: {{process| left}} ;width:{{ process |width }}; background-color:blue;">{{process.id}}</div>
        </div>
     </div>
+
+    <div id="statistics"><!--Shanika-->
+      <h3>Statistics</h3>
+    </div>
+
 
   </body>
 </html>
