@@ -28,7 +28,7 @@ schedulerApp.service('dataService',function() {
     states:{step:0, //current step
     			processI:-1,
     			occupyTime:0,
-    			simulatorState:"running",
+    			simulatorState:"stoped",
     			finishedProcessCount:0 //Number of processes finished
     			}, 
 
@@ -43,6 +43,15 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
 
 	$scope.addProcess = function() {
+
+		for(var i = 0, len = $scope.processes.length; i < len; i++) {
+			if($scope.processes[i].id==$scope.enteredId)
+			{
+				alert("Invalid Process Id. Process Id has to be unique!");
+				return;
+			}
+			}
+
 		//make a process element
 		var p = {id:$scope.enteredId, startTime:$scope.enteredStartTime, runTime:$scope.enteredRunTime , state:"defined", startedTime:-1, endedTime:-1};
 
@@ -103,7 +112,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 			},$scope.speed);
 			$scope.states.simulatorState="running";
 		}
-	}
+	};
 
 	//Pause the simulation
 	$scope.pause= function()
@@ -114,7 +123,27 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 			 runner = undefined;
 			 $scope.states.simulatorState="paused";
 		}
-	}
+	};
+
+	//Pause the simulation
+	$scope.reset = function()
+	{
+		$scope.pause();
+
+		for(var i = 0, len = $scope.processes.length; i < len; i++) {
+			var p = $scope.processes[i];
+			p.state="defined";
+			p.startedTime=-1;
+			p.endedTime=-1;
+			p.waitingTime = -1;
+	    }
+	    $scope.states.step = 0;
+	    $scope.states.processI = -1;
+    	$scope.states.occupyTime=0;
+    	$scope.states.simulatorState="stoped";
+    	$scope.states.finishedProcessCount=0;
+
+	};
 
 	$scope.stepForward = function() {
 
@@ -135,11 +164,14 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 	function calculatePriority(){
 		//update waiting time, priority of processes
 		for(var i = 0, len = $scope.processes.length; i < len; i++) {
+			if($scope.processes[i].state == "defined")
+			{
 			//Negative for processes which are not yet started
 			$scope.processes[i].waitingTime = $scope.states.step-$scope.processes[i].startTime;
 
 			//Calculate RR(priority)
-			$scope.processes[i].priority = 1+($scope.processes[i].waitingTime/$scope.processes[i].runTime)
+			$scope.processes[i].priority = 1+($scope.processes[i].waitingTime/$scope.processes[i].runTime);
+			}
 		}	
 	};
 
@@ -216,5 +248,13 @@ schedulerApp.filter('width', function() {
 schedulerApp.filter('left', function() {
    return function(process){
 			return process.startedTime*3;
+	};
+});
+
+schedulerApp.filter('format', function() {
+   return function(val){
+   			if(val<0 || angular.isUndefined(val) )
+			return "-";
+			return val;
 	};
 });

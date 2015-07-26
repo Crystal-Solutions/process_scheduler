@@ -25,10 +25,16 @@
 
       <table width="100%"  class="table">
         <tr class="animate-repeat">
-          <th> #</th>
+          <th> # </th>
           <th> Process Id</th>
-          <th> Start Time</th>
-          <th> Run Time </th>
+          <th> Arrive Time</th>
+          <th> Expected RunTime </th>
+          <th> Waited Time </th>
+          <th> Priority(Response Ratio) </th>
+          <th> Started Time</th>
+
+          <th> Finished Time</th>
+          <th> State</th>
           <th> Actions</th>
 
         </tr>
@@ -45,14 +51,24 @@
           </td>
 
           <td>
-            {{process.state}}
+            {{process.waitingTime | format}}
           </td>
 
           <td>
-            {{process.startedTime}}
+            {{process.priority | number:4 | format}}
           </td>
+
+
           <td>
-            {{process.endedTime}}
+            {{process.startedTime | format}}
+          </td>
+
+          <td>
+            {{process.endedTime | format}}
+          </td>
+
+          <td>
+            {{process.state}}
           </td>
 
           <td>
@@ -66,10 +82,14 @@
 
 
       <form ng-submit="addProcess()">
-        <input type="text" ng-model="enteredId">
-        <input type="text" ng-model="enteredStartTime">
-        <input type="text" ng-model="enteredRunTime">
-        <input type="submit" value="add">
+      <h4>Add new process</h4><br>
+      <label> Id: </label>
+        <input type="number" ng-model="enteredId" min="0" max="10000"  required>
+      <label> Arrive Time: </label>
+        <input type="number" ng-model="enteredStartTime" min="0" max="1000" required>
+      <label> Expected Run Time: </label>
+        <input type="number" ng-model="enteredRunTime" min="1" max="500" required>
+        <input type="submit" value="Add">
       </form>
     </div>
 
@@ -81,10 +101,13 @@
 
       <table width="100%"  class="table">
         <tr class="animate-repeat">
-          <th> #</th>
+          <th> # </th>
           <th> Process Id</th>
-          <th> Start Time</th>
-          <th> Run Time </th>
+          <th> Arrive Time</th>
+          <th> Expected RunTime </th>
+          <th> Waiting Time </th>
+          <th> Priority(Response Ratio) </th>
+
           <th> Actions</th>
 
         </tr>
@@ -135,6 +158,7 @@
       <input type="button" ng-click="stepForward()" value="Step Forward">
       <input type="button" ng-click="play()" value="Start">
       <input type="button" ng-click="pause()" value="Stop">
+      <input type="button" ng-click="reset()" value="Reset">
     </div>
 
     <div id="simulator" ng-controller="dataCtrl"><!--Shanika-->
