@@ -15,14 +15,14 @@ schedulerApp.service('dataService',function() {
 //Initial values
   var data = {
     processes: [
-    {id:0, startTime:0, runTime:15, state:"defined", startedTime:-1, endedTime:-1},
+    {id:0, startTime:5, runTime:15, state:"defined", startedTime:-1, endedTime:-1},
     {id:1, startTime:10, runTime:10, state:"defined", startedTime:-1, endedTime:-1},
     {id:2, startTime:35, runTime:25, state:"defined", startedTime:-1, endedTime:-1}, 
     {id:3, startTime:25, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
-    {id:4, startTime:22, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
-    {id:5, startTime:20, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
+    {id:4, startTime:222, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
+    {id:5, startTime:180, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
     {id:6, startTime:10, runTime:30, state:"defined", startedTime:-1, endedTime:-1}, 
-    {id:7, startTime:5, runTime:30, state:"defined", startedTime:-1, endedTime:-1},
+    {id:7, startTime:15, runTime:30, state:"defined", startedTime:-1, endedTime:-1},
     ],
 
     states:{step:0, //current step
@@ -30,7 +30,8 @@ schedulerApp.service('dataService',function() {
     			occupyTime:0,
     			simulatorState:"stoped",
     			finishedProcessCount:0,
-    			cpuTotalOccupiedTime:0 //Number of processes finished
+    			cpuTotalOccupiedTime:0,
+    			cpuUtilization:0, //Number of processes finished
     			}, 
 
    	timeBars:[],
@@ -175,8 +176,12 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 		//Calculate priorities for next step alocation
 		$scope.states.step +=1;
 
+
 		if($scope.states.processI!=-1)
 			$scope.states.cpuTotalOccupiedTime++;
+
+
+		$scope.states.cpuUtilization = $scope.states.cpuTotalOccupiedTime*100/$scope.states.step;
 		calculatePriority();
 	};
 
@@ -276,6 +281,7 @@ schedulerApp.filter('left', function() {
 
 schedulerApp.filter('format', function() {
    return function(val){
+   			if(val=='') return 0;
    			if(val<0 || angular.isUndefined(val) )
 			return "-";
 			return val;
