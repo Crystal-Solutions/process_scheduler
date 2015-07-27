@@ -148,8 +148,18 @@
 
     <div id="simulator" ng-controller="dataCtrl"><!--Shanika-->
       <h3>Process History</h3>  
+      Scale: 
+      <select ng-model="scale">
+        <option value="1">100%</option>
+        <option value="2">200%</option>
+        <option value="3">300%</option>
+        <option value="4">400%</option>
+      </select>
+      <div class="verticalBar" style="left:100px"></div>
+
        <div class="histroy_process"  ng-repeat="process in processes" >
-        <div style="margin-left: {{process| left}} ;width:{{ process |width }}; background-color:blue;">{{process.id}}</div>
+
+        <div style="margin-left: {{ (process| left)*scale }}px;width:{{ (process |width)*scale }}px; background-color:blue;">{{process.id}}</div>
        </div>
     </div>
 

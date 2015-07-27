@@ -32,6 +32,8 @@ schedulerApp.service('dataService',function() {
     			finishedProcessCount:0 //Number of processes finished
     			}, 
 
+   	timeBars:[],
+
 
   };
   return data;
@@ -41,6 +43,12 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
+
+
+	//Bars for History
+	$scope.timeBars = dataService.timeBars;
+	$scope.scale = 1;
+
 
 	$scope.addProcess = function() {
 
@@ -96,6 +104,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
 	$scope.states = dataService.states;
+	$scope.timeBars = dataService.timeBars;
 
 	$scope.speed = 100;
 
@@ -150,6 +159,8 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 		//if all processes are finished
 		if($scope.states.finishedProcessCount==$scope.processes.length) { $scope.pause(); return; }
 
+		// add a new bar 
+		$scope.timeBars.push($scope.states.step);
 		//First time calculate priorities
 		if($scope.states.step==0)
 			calculatePriority();
@@ -230,6 +241,9 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 }]);
 
 
+
+
+
 //CPU Details ctrl
 schedulerApp.controller('states', function ($scope,dataService){
 
@@ -241,13 +255,13 @@ schedulerApp.controller('states', function ($scope,dataService){
 
 schedulerApp.filter('width', function() {
    return function(process){
-			return (process.endedTime-process.startedTime)*3;
+			return (process.endedTime-process.startedTime);
 	};
 });
 
 schedulerApp.filter('left', function() {
    return function(process){
-			return process.startedTime*3;
+			return process.startedTime;
 	};
 });
 
