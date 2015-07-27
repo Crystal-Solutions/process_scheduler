@@ -13,12 +13,14 @@
   
   <body >
 
+ 
+    
     <div id="header">
       <h2>Scheduling Algorithm Simulator</h2>
       <h3>Highest Response Ratio Next</h3>
     </div>
 
-    <div id="processes" class="container" ng-controller="dataCtrl"><!--Shanika-->
+  <div id="processes" class="container" ng-controller="dataCtrl"><!--Shanika-->
 
       <h3>Process Details List </h3>  <!--Shanika-->
 
@@ -103,6 +105,7 @@
       <input type="button" ng-click="reset()" value="Reset">
   </div>
 
+
  <div id="cpu" ng-controller="states">
       <h3>CPU Details</h3> 
       <br>
@@ -110,8 +113,11 @@
         <li>Time = {{states.step}}</li>
         <li>Occupy Time = {{states.occupyTime}}</li>
         <li>Process Id = {{processes[states.processI].id}}</li>
+        <li>Total Occupied Time = {{states.cpuTotalOccupiedTime}}</li>
+
       </ul>
     </div>
+
 
 
 <div id="waiting" ng-controller="dataCtrl">
@@ -142,31 +148,34 @@
       </table>
     </div>
 
-   
 
-   
 
+  
+   
+<div>
     <div id="simulator" ng-controller="dataCtrl"><!--Shanika-->
       <h3>Process History</h3>  
       Scale: 
       <select ng-model="scale">
-        <option value="1">100%</option>
-        <option value="2">200%</option>
-        <option value="3">300%</option>
-        <option value="4">400%</option>
+        <option value="2">25%</option>
+        <option value="3">50%</option>
+        <option value="4" selected="selected" >100%</option>
+        <option value="5">200%</option>
       </select>
-      <div class="verticalBar" style="left:100px"></div>
 
+
+
+        <div class="verticalBar" style="left:{{(bar+1)*scale+20}}px"  ng-repeat="bar in timeBars">{{bar}}</div>
+
+      <div style="margin: 20px;">
        <div class="histroy_process"  ng-repeat="process in processes" >
 
         <div style="margin-left: {{ (process| left)*scale }}px;width:{{ (process |width)*scale }}px; background-color:blue;">{{process.id}}</div>
+      </div>
+
        </div>
     </div>
-
-    <div id="statistics"><!--Shanika-->
-      <h3>Statistics</h3>
-    </div>
-
+</div>
 
   </body>
 </html>

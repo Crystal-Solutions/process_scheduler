@@ -65,15 +65,15 @@ input
     background-color:#0174DF;
     color:white;
     text-align:center;
-    width:50%;
-    float: right;
+    width:100%;
+    height: 100px;
     padding:5px;
 }
 
 #processes{   
   background-color:#F4FA58;
   color: black;
-  height:400px;
+  height:450px;
   width:50%;
   float:left;
   padding: 5px;
@@ -84,34 +84,36 @@ input
 #control{   
   background-color:rgb(200,200,220);
   color: black;
-  height:150px;
-  width:25%;
-  float:right;
+  height:100px;
   padding: 5px;
+  width:50%;
+  float:left;
+}
+
+
+
+#cpu{   
+  background-color:#01DF3A;
+  color: black;
+  height:150px;
+  padding: 5px;
+  width:50%;
+  float:left;
 }
 
 #waiting{   
   background-color:#AC58FA;
   color: black;
   height:200px;
+  width:100%;
+  padding: 5px;
   width:50%;
   float:left;
-  padding: 5px;
-}
-
-#cpu{   
-  background-color:#01DF3A;
-  color: black;
-  height:150px;
-  width:25%;
-  float:left;
-  padding: 5px;
 }
 
 #statistics{   
   background-color:#FA58AC;
   color: black;
-  
   width:300px;
   float:left;
   padding: 5px;
@@ -120,15 +122,17 @@ input
 #simulator{   
   background-color:#FE9A2E;
   color: black;
-  width:75%;
+  width:100%;
+  min-height: 200px;
   float:left;
   padding: 5px;
+
 }
 
 .histroy_process
 {
-  line-height: 12px;
-  font-size: 10px;
+  line-height: 14px;
+  font-size: 11px;
   border-bottom-style: solid;
   border-bottom-width: 1;
   border-bottom-color: rgba(255,255,255,.4);
@@ -138,6 +142,7 @@ input
 
 .verticalBar
 {
+  font-size: 10px;
   position: absolute;
   height: 100%;
   border-left-style: solid;
