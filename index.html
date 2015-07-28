@@ -85,12 +85,12 @@
 
       <form ng-submit="addProcess()">
       <h4>Add new process</h4>
-      <label> Id: </label>
-        <input type="number" ng-model="enteredId" min="0" max="10000"  required>
-      <label> Arrive Time: </label>
-        <input type="number" ng-model="enteredStartTime" min="0" max="1000" required>
-      <label> Expected Run Time: </label>
-        <input type="number" ng-model="enteredRunTime" min="1" max="500" required>
+      <label> Id : </label>
+        <input style="width:70px" type="number" ng-model="enteredId" min="0" max="10000"  required>
+      <label> Arrive Time : </label>
+        <input style="width:70px" type="number" ng-model="enteredStartTime" min="0" max="1000" required>
+      <label> Expected Run Time : </label>
+        <input style="width:70px" type="number" ng-model="enteredRunTime" min="1" max="500" required>
         <input type="submit" value="Add">
       </form>
     </div>
@@ -98,7 +98,8 @@
 
  <div id="control" ng-controller="simulationCtrl">
       <h3>Simulation Control</h3>  <!--Shanika-->
-      <input type="text" ng-model="speed">
+      <label>Milliseconds per step: </label>
+      <input style="width:80px" type="text" ng-model="speed">
       <input type="button" ng-click="stepForward()" value="Step Forward">
       <input type="button" ng-click="play()" value="Start">
       <input type="button" ng-click="pause()" value="Stop">
@@ -110,10 +111,10 @@
       <h3>CPU Details</h3> 
       <br>
       <ul>
-        <li>Time = {{states.step}}</li>
-        <li>Occupy Time = {{states.occupyTime}}</li>
-        <li>Process Id = {{processes[states.processI].id}}</li>
-        <li>Total Occupied Time = {{states.cpuTotalOccupiedTime}}</li>
+        <li><label>Step : {{states.step}}</label>  </li>
+        <li><label>Occupy Time : {{states.occupyTime}}</label></li>
+        <li><label>Process Id : {{processes[states.processI].id}}</label></li>
+        <li><label>CPU Utilization : {{states.cpuUtilization  | number:4}}%</label></li>
 
       </ul>
     </div>
@@ -155,7 +156,7 @@
 <div>
     <div id="simulator" ng-controller="dataCtrl"><!--Shanika-->
       <h3>Process History</h3>  
-      Scale: 
+      <label>Scale : </label> 
       <select ng-model="scale">
         <option value="2">25%</option>
         <option value="3">50%</option>
