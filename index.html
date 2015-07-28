@@ -57,7 +57,7 @@
           </td>
 
           <td>
-            {{process.priority | number:4 | format}}
+            {{process.priority | number:4 | format2}}
           </td>
 
 
@@ -102,7 +102,7 @@
       <input style="width:80px" type="text" ng-model="speed">
       <input type="button" ng-click="stepForward()" value="Step Forward">
       <input type="button" ng-click="play()" value="Start">
-      <input type="button" ng-click="pause()" value="Stop">
+      <input type="button" ng-click="pause()" value="Pause">
       <input type="button" ng-click="reset()" value="Reset">
   </div>
 

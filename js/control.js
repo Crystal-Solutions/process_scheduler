@@ -45,7 +45,7 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
-
+	$scope.states = dataService.states;
 
 	//Bars for History
 	$scope.timeBars = dataService.timeBars;
@@ -53,6 +53,12 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 
 
 	$scope.addProcess = function() {
+
+		if($scope.states.simulatorState!="stoped") 
+			{	
+				alert("Please stop the simulation to edit Data!");
+				return;
+			}
 
 		for(var i = 0, len = $scope.processes.length; i < len; i++) {
 			if($scope.processes[i].id==$scope.enteredId)
@@ -75,6 +81,12 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 	};
 
 	$scope.removeProcess = function(id) {
+
+		if($scope.states.simulatorState!="stoped") 
+			{	
+				alert("Please stop the simulation to edit Data!");
+				return;
+			}
 
 		//find the element with that process id
 		var index = -1;
@@ -148,6 +160,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 			p.startedTime=-1;
 			p.endedTime=-1;
 			p.waitingTime = -1;
+			p.priority = -1;
 	    }
 	    $scope.states.step = 0;
 	    $scope.states.processI = -1;
@@ -290,6 +303,14 @@ schedulerApp.filter('format', function() {
 	};
 });
 
+schedulerApp.filter('format2', function() {
+   return function(val){
+   			if(val=='') return 0;
+   			if(val<1 || angular.isUndefined(val) )
+			return "-";
+			return val;
+	};
+});
 
 schedulerApp.filter('finishedTime', function() {
    return function(process){
