@@ -121,6 +121,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 
 				$scope.stepForward();
 			},$scope.speed);
+
 			$scope.states.simulatorState="running";
 		}
 	};
@@ -167,6 +168,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 		// add a new bar 
 		if($scope.states.step%10==0)
 			$scope.timeBars.push($scope.states.step);
+
 		//First time calculate priorities
 		if($scope.states.step==0)
 			calculatePriority();
@@ -291,8 +293,8 @@ schedulerApp.filter('format', function() {
 
 schedulerApp.filter('finishedTime', function() {
    return function(process){
-   			if(val<0 || angular.isUndefined(val) )
+
+   			if(process.state=="finished") return process.endedTime;
 			return "-";
-			return val;
 	};
 });
