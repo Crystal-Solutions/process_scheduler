@@ -281,3 +281,12 @@ schedulerApp.filter('format', function() {
 			return val;
 	};
 });
+
+
+schedulerApp.filter('finishedTime', function() {
+   return function(process){
+   			if(val<0 || angular.isUndefined(val) )
+			return "-";
+			return val;
+	};
+});
