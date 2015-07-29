@@ -34,6 +34,7 @@ schedulerApp.service('dataService',function() {
     			cpuUtilization:0, //Number of processes finished
     			}, 
 
+    //To add time marker bas to the process history timeline
    	timeBars:[],
 
 
@@ -43,23 +44,18 @@ schedulerApp.service('dataService',function() {
 
 schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 
+	//------add data to scope
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
-	$scope.states = dataService.states;
-
 	//Bars for History
 	$scope.timeBars = dataService.timeBars;
 	$scope.scale = 4;
 
 
+	// add process Function
 	$scope.addProcess = function() {
 
-		if($scope.states.simulatorState!="stoped") 
-			{	
-				alert("Please stop the simulation to edit Data!");
-				return;
-			}
-
+		//Check there is a process with same id
 		for(var i = 0, len = $scope.processes.length; i < len; i++) {
 			if($scope.processes[i].id==$scope.enteredId)
 			{
@@ -80,13 +76,8 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 	  $scope.enteredRunTime = '';
 	};
 
+	//remove process function
 	$scope.removeProcess = function(id) {
-
-		if($scope.states.simulatorState!="stoped") 
-			{	
-				alert("Please stop the simulation to edit Data!");
-				return;
-			}
 
 		//find the element with that process id
 		var index = -1;
@@ -98,12 +89,14 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 	    
 	    //remove it
 	  	var proc = $scope.processes.splice(index, 1)[0];
+
+	  	//Add those to text boxes, so we can edit it
 	  	$scope.enteredId = proc.id;
 	  	$scope.enteredStartTime = proc.startTime;
 	  	$scope.enteredRunTime = proc.runTime;
 	};
 
-
+	//Returns whether it is a waiting process. used to filter and make the waiting list
 	$scope.isWaiting = function(item){
 	      return item.waitingTime>=0 && item.state=="defined";
 	    };
@@ -115,13 +108,14 @@ schedulerApp.controller('dataCtrl',  function ($scope,dataService){
 //Process Simulator
 schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', function ($scope,  $interval,dataService){
 
+	//-----add data to scope
 	//Processes default
 	$scope.processes = dataService.processes;//[{id:0, startTime:0, runTime:10}];
 	$scope.states = dataService.states;
 	$scope.timeBars = dataService.timeBars;
-
 	$scope.speed = 100;
 
+	// is the interval triggered function handler
 	var runner; 
 
 	//Run the simulaation
@@ -133,7 +127,6 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 
 				$scope.stepForward();
 			},$scope.speed);
-
 			$scope.states.simulatorState="running";
 		}
 	};
@@ -154,14 +147,16 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 	{
 		$scope.pause();
 
+		//Reset data in processes
 		for(var i = 0, len = $scope.processes.length; i < len; i++) {
 			var p = $scope.processes[i];
 			p.state="defined";
 			p.startedTime=-1;
 			p.endedTime=-1;
 			p.waitingTime = -1;
-			p.priority = -1;
 	    }
+
+	    //Reset states
 	    $scope.states.step = 0;
 	    $scope.states.processI = -1;
     	$scope.states.occupyTime=0;
@@ -169,34 +164,38 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
     	$scope.states.finishedProcessCount=0;
     	$scope.states.cpuTotalOccupiedTime = 0;
 
+    	//REmove timebars
     	dataService.timeBars.splice(0,dataService.timeBars.length);
 
 	};
 
 	$scope.stepForward = function() {
 
-		//if all processes are finished
+		//if all processes are finished return.. Do not proceed
 		if($scope.states.finishedProcessCount==$scope.processes.length) { $scope.pause(); return; }
 
 		// add a new bar 
 		if($scope.states.step%10==0)
 			$scope.timeBars.push($scope.states.step);
 
-		//First time calculate priorities
+		//First time calculate priorities. At the first time can't allocate without knowing priorities.
 		if($scope.states.step==0)
 			calculatePriority();
 
+		//Allocate to cpu and dispatch
 		updateCPU();
 
 		//Calculate priorities for next step alocation
 		$scope.states.step +=1;
 
-
+		//If cpu is utilized increase cpuTotalOccupiedTime
 		if($scope.states.processI!=-1)
 			$scope.states.cpuTotalOccupiedTime++;
 
-
+		//Calculate utilization
 		$scope.states.cpuUtilization = $scope.states.cpuTotalOccupiedTime*100/$scope.states.step;
+
+		//Calculate priority for next step
 		calculatePriority();
 	};
 
@@ -217,7 +216,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 	//Udate CPU
 	function updateCPU()
 	{
-		//If CPU is not free and occupied time equal to currentProcesses runtime => make cpu free
+		//If if Process is finished(CPU is not free and occupied time equal to currentProcesses runtime) => make cpu free
 		if($scope.states.processI!=-1 )
 		if($scope.states.occupyTime==$scope.processes[$scope.states.processI].runTime)
 		{
@@ -237,6 +236,8 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 		//allocate if cpu is free and if there is a process to be allocated
 		if($scope.states.processI==-1)
 		{
+
+			//Find a process to be allocated, one with the Highest Response Ratio
 			var processI = -1;
 			var highestPriority = 0;
 			for(var i = 0, len = $scope.processes.length; i < len; i++) {
@@ -247,7 +248,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 		    	}
 	    	}
 
-	    	//if there is a process to be allocated
+	    	//if there is a process to be allocated => alocate it!
 		    if(processI!=-1)
 		    	{
 	    			$scope.states.processI = processI
@@ -261,7 +262,7 @@ schedulerApp.controller('simulationCtrl', ['$scope','$interval', 'dataService', 
 		{
 			$scope.states.occupyTime+=1;
 			var processId = $scope.states.processI;
-			$scope.processes[processId].endedTime = $scope.states.step;
+			$scope.processes[processId].endedTime = $scope.states.step; //Update ended time step by step to show it in history
 		}
 	};
 
@@ -300,22 +301,5 @@ schedulerApp.filter('format', function() {
    			if(val<0 || angular.isUndefined(val) )
 			return "-";
 			return val;
-	};
-});
-
-schedulerApp.filter('format2', function() {
-   return function(val){
-   			if(val=='') return 0;
-   			if(val<1 || angular.isUndefined(val) )
-			return "-";
-			return val;
-	};
-});
-
-schedulerApp.filter('finishedTime', function() {
-   return function(process){
-
-   			if(process.state=="finished") return process.endedTime;
-			return "-";
 	};
 });
